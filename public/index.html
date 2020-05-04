@@ -24,6 +24,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <script src="https://d3js.org/d3.v5.js"></script>
     <title>React App</title>
   </head>
   <body>
@@ -39,5 +40,56 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    ---
+    <ol>
+    <li>新規ノード: 赤</li>
+    <li>更新ノード: 赤 -> 緑</li>
+    <li>削除ノード: 黒になって消える</li>
+    </ol>
+    <div id="foo" >
+    </div>
+      <div>
+        <button onclick="draw([])">draw([])</button>
+      </div>
+      <div>
+        <button onclick="draw([1, 2, 3])">draw([1, 2, 3])</button>
+      </div>
+      <div>
+        <button onclick="draw([1, 2, 3, 4, 5])">draw([1, 2, 3, 4, 5])</button>
+      </div>
+      <div>
+        <button onclick="draw([2, 4])">draw([2, 4])</button>
+      </div>
+  <script>
+    const data = [1, 2, 3, 4, 5]
+function draw(d) {
+  const f = d3.select("#foo")
+
+  f
+  .selectAll("div")
+  .data(d)
+  .join(
+    enter => enter.append("div")
+    .style("color", "red")
+    .text(d => `hello, world ${d}`)
+    .style("opacity", 0)
+    .call(enter => enter.transition().duration(1000)
+      .style("opacity", 1)),
+
+    update => update
+    .text(d => `hello, world ${d}`)
+    .call(update => 
+      update
+      .transition().duration(1000)
+      .style("color", "green")
+    ),
+
+    exit => exit
+    .style("color", "black")
+    .call(exit => exit.transition().duration(1000).style("opacity", 0).remove())
+  )
+}
+  draw(data)
+  </script>
   </body>
 </html>
